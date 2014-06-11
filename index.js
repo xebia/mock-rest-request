@@ -7,6 +7,13 @@
  * @return {Function} middleware
  * @api public
  */
+ var mocks = {
+  GET: {},
+  PUT: {},
+  POST: {},
+  PATCH: {},
+  DELETE: {}
+};
 
 module.exports = function mockRequests(options) {
   return function (req, res, next) {
