@@ -1,0 +1,23 @@
+{
+  "name": "mock-rest-request",
+  "version": "0.0.1",
+  "description": "Connect middleware to mock REST requests",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:xebia/mock-rest-request.git"
+  },
+  "keywords": [
+    "mock",
+    "rest",
+    "request",
+    "connect",
+    "nodejs"
+  ],
+  "author": "Lammert Westerhoff",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/xebia/mock-rest-request/issues"
+  },
+  "homepage": "https://github.com/xebia/mock-rest-request"
+}
