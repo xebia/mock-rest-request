@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git@github.com:xebia/mock-rest-request.git"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "keywords": [
     "mock",
     "rest",
@@ -19,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/xebia/mock-rest-request/issues"
   },
-  "homepage": "https://github.com/xebia/mock-rest-request"
+  "homepage": "https://github.com/xebia/mock-rest-request",
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "supertest": "^0.13.0"
+  }
 }
