@@ -42,8 +42,14 @@ describe('mockRequests()', function () {
         .expect(200)
         .expect('not mocked', done);
     });
-  })
 
+    it('should not mock non GET requests', function (done) {
+      request(server)
+        .put('/api')
+        .expect(200)
+        .expect('not mocked', done);
+    })
+  })
 
 });
 
