@@ -29,11 +29,13 @@ module.exports = function mockRequests(options) {
         var headers = {
           'Content-Type': req.headers['content-type']
         };
-        _.each(req.headers, function (value, key) {
-          if (key.indexOf('mock-header-') === 0) {
-            headers[key.substring(12)] = value;
+        for (var key in req.headers) {
+          if (req.headers.hasOwnProperty(key)) {
+            if (key.indexOf('mock-header-') === 0) {
+              headers[key.substring(12)] = req.headers[key];
+            }
           }
-        });
+        }
 
         mocks[req.headers['mock-method'] || 'GET'][path] = {
           body: body,
