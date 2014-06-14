@@ -9,9 +9,10 @@ describe('mockRequests()', function () {
 
   beforeEach(function () {
     server = createServer({}, function (req, res) {
-      res.end('not mocked')
+      res.end('not mocked');
     });
-  })
+  });
+
   it('should not mock when no mocks are configured', function (done) {
 
     request(server)
@@ -49,6 +50,37 @@ describe('mockRequests()', function () {
         .expect(200)
         .expect('not mocked', done);
     })
+  });
+
+  it('should allow a different status code', function (done) {
+    request(server)
+      .post('/mock/api')
+      .set('mock-response', '500')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(500)
+      .expect('{"mock":"data"}', done);
+  });
+
+  it('should allow a different method', function (done) {
+    request(server)
+      .post('/mock/api')
+      .set('mock-method', 'POST')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('not mocked');
+
+    request(server)
+      .post('/api')
+      .expect(200)
+      .expect('{"mock":"data"}', done);
   })
 
 });
