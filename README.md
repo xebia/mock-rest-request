@@ -27,7 +27,7 @@ Install with NPM and add to your project.
 
 ## With Connect middleware
 
-    var mockRequests = require('mock-rest-requests');
+    var mockRequests = require('mock-rest-request');
     var app = connect()
       .use(mockRequests())
 
@@ -36,15 +36,15 @@ Install with NPM and add to your project.
 ## Without Connect middleware
 
     var http = require('http');
-    var mockRequests = require('mock-rest-requests');
+    var mockRequests = require('mock-rest-request');
     http.createServer(function (req, res) {
       mockRequests()(req, res);
     }).listen(3000);
-  
+
 ## In Gruntfile.js
 
-    var mockRequests = require('mock-rest-requests');
-    
+    var mockRequests = require('mock-rest-request');
+
     connect: {
       options: {
         // your options
@@ -59,18 +59,18 @@ Install with NPM and add to your project.
         }
       }
     }
-    
+
 # Usage
 
-Once you've added `mock-rest-requests` to your project, you can start making POST requests to mock certain rest requests. These call need to start the path with `/mock`, followed by the path to mock.
+Once you've added `mock-rest-request` to your project, you can start making POST requests to mock certain rest requests. These call need to start the path with `/mock`, followed by the path to mock.
 
 Let's say we have our server running on localhost, port 3000 and we want to mock the call that gives back the user. With curl we can send the POST request telling the server that we want to mock this request.
 
     curl -X POST -d '{"name":"Foo"}' http://localhost:3000/mock/api/user
-    
+
 After that, normal calls (like the ones coming from our web application) will then return the mocked data.
 
     curl http://localhost:3000/api/user
-    
+
     {"name":"Foo"}
-      
+
