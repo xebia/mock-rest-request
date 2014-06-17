@@ -50,7 +50,7 @@ module.exports = function mockRequests(options) {
       mocks[req.headers['mock-method'] || 'GET'][req.url.substring(6)] = null;
       res.writeHead(200);
       res.end();
-    } else if (req.url.indexOf('/api') === 0) {
+    } else  {
       var mockedResponse = mocks[req.method][req.url];
       if (mockedResponse) {
         res.writeHead(mockedResponse.responseCode, mockedResponse.headers);
@@ -59,8 +59,6 @@ module.exports = function mockRequests(options) {
       } else {
         next();
       }
-    } else {
-      next();
     }
   };
 };
