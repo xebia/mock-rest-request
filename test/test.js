@@ -81,6 +81,27 @@ describe('mockRequests()', function () {
       .post('/api')
       .expect(200)
       .expect('{"mock":"data"}', done);
+  });
+
+  it('should stop mocking after a reset request', function (done) {
+    request(server)
+      .post('/mock/api')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('{"mock":"data"}');
+
+    request(server)
+      .get('/reset/api')
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('not mocked', done);
   })
 
 });
