@@ -54,7 +54,13 @@ Install with NPM and add to your project.
         },
         middleware: function (connect, options) {
           var middlewares = [];
+
           middlewares.push(mockRequests());
+
+          options.base.forEach(function (base) {
+            middlewares.push(connect.static(base));
+          });
+
           return middlewares;
         }
       }
@@ -74,3 +80,6 @@ After that, normal calls (like the ones coming from our web application) will th
 
     {"name":"Foo"}
 
+To remove the mock for a certain path, call /reset on the path.
+
+    curl http://localhost:3000/reset/api/user
