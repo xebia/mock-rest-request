@@ -102,8 +102,24 @@ describe('mockRequests()', function () {
       .get('/api')
       .expect(200)
       .expect('not mocked', done);
-  })
+  });
 
+  it('should list all mocked methods and paths', function (done) {
+    request(server)
+      .post('/mock/api')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('{"mock":"data"}');
+
+    request(server)
+      .get('/list')
+      .expect(200)
+      .expect('GET:\n /api\nPUT:\nPOST:\n /api\nPATCH:\nDELETE:\n', done);
+  })
 });
 
 function createServer(opts, fn) {
