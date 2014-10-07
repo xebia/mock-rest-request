@@ -37,7 +37,12 @@ module.exports = function mockRequests(options) {
           }
         }
 
-        mocks[req.headers['mock-method'] || 'GET'][path] = {
+        var method = req.headers['mock-method'] || 'GET';
+
+        if(typeof mocks[method] === 'undefined')
+            mocks[method] = {};
+
+        mocks[method][path] = {
           body: body,
           responseCode: req.headers['mock-response'] || 200,
           headers: headers
