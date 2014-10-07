@@ -49,6 +49,11 @@ describe('mockRequests()', function () {
         .put('/api')
         .expect(200)
         .expect('not mocked', done);
+      
+      request(server)
+        .post('/api')
+        .expect(200)
+        .expect('not mocked', done);
     })
   });
 
