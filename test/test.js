@@ -116,21 +116,21 @@ describe('mockRequests()', function () {
       .get('/api')
       .expect(200)
       .expect('not mocked', done);
-  })
+  });
 
 });
 
 function createServer(opts, fn) {
-  var _mockRequests = mockRequests(opts)
+  var _mockRequests = mockRequests(opts);
   return http.createServer(function (req, res) {
     _mockRequests(req, res, function (err) {
       if (err) {
-        res.statusCode = err.status || 500
-        res.end(err.message)
+        res.statusCode = err.status || 500;
+        res.end(err.message);
         return;
       }
 
-      fn(req, res)
-    })
-  })
+      fn(req, res);
+    });
+  });
 }
