@@ -11,6 +11,13 @@ describe('mockRequests()', function () {
     server = createServer({}, function (req, res) {
       res.end('not mocked');
     });
+    request(server)
+      .get('/reset/api')
+      .end(function () {});
+    request(server)
+      .get('/reset/api')
+      .set('mock-method', 'POST')
+      .end(function () {});
   });
 
   it('should not mock when no mocks are configured', function (done) {
