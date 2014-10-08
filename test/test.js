@@ -51,17 +51,19 @@ describe('mockRequests()', function () {
         .expect('not mocked', done);
     });
 
-    it('should not mock non GET requests', function (done) {
+    it('should not mock non GET (PUT) requests', function (done) {
       request(server)
         .put('/api')
         .expect(200)
         .expect('not mocked', done);
-      
+    });
+
+    it('should not mock non GET (POST) requests', function (done) {
       request(server)
         .post('/api')
         .expect(200)
         .expect('not mocked', done);
-    })
+    });
   });
 
   it('should allow a different status code', function (done) {
