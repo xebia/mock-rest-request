@@ -7,15 +7,25 @@
  * @return {Function} middleware
  * @api public
  */
- var mocks = {
-  GET: {},
-  PUT: {},
-  POST: {},
-  PATCH: {},
-  DELETE: {}
-};
 
 module.exports = function mockRequests(options) {
+  var mocks = {
+    GET: {},
+    PUT: {},
+    POST: {},
+    PATCH: {},
+    DELETE: {}
+  };
+
+  function mocksForRequest(req) {
+    var method = req.headers['mock-method'] || 'GET';
+
+    if(typeof mocks[method] === 'undefined')
+      mocks[method] = {};
+
+    return mocks[method];
+  }
+
   return function (req, res, next) {
     if (req.method === 'POST' && req.url.indexOf('/mock') === 0) {
       var path = req.url.substring(5);
@@ -37,12 +47,8 @@ module.exports = function mockRequests(options) {
           }
         }
 
-        var method = req.headers['mock-method'] || 'GET';
-
-        if(typeof mocks[method] === 'undefined')
-            mocks[method] = {};
-
-        mocks[method][path] = {
+        var mocks = mocksForRequest(req);
+        mocks[path] = {
           body: body,
           responseCode: req.headers['mock-response'] || 200,
           headers: headers
@@ -52,8 +58,19 @@ module.exports = function mockRequests(options) {
         res.end();
       });
     } else if (req.url.indexOf('/reset') === 0) {
-      mocks[req.headers['mock-method'] || 'GET'][req.url.substring(6)] = null;
+      mocksForRequest(req)[req.url.substring(6)] = null;
       res.writeHead(200);
+      res.end();
+    } else if (req.url.indexOf('/list') === 0) {
+      res.writeHead(200, {
+          'Content-Type': 'text/plain'
+      });
+      for(var method in mocks) {
+          res.write(method + ":\n");
+          for(var p in mocks[method]) {
+            res.write(" " + p + "\n");
+          }
+      }
       res.end();
     } else  {
       var mockedResponse = mocks[req.method][req.url];
