@@ -11,17 +11,9 @@ describe('mockRequests()', function () {
     server = createServer({}, function (req, res) {
       res.end('not mocked');
     });
-    request(server)
-      .get('/reset/api')
-      .end(function () {});
-    request(server)
-      .get('/reset/api')
-      .set('mock-method', 'POST')
-      .end(function () {});
   });
 
   it('should not mock when no mocks are configured', function (done) {
-
     request(server)
       .get('/')
       .expect(200)
@@ -134,6 +126,23 @@ describe('mockRequests()', function () {
       .copy('/api')
       .expect(200)
       .expect('{"mock":"data"}', done);
+  });
+
+  it('should list all mocked methods and paths', function (done) {
+    request(server)
+      .post('/mock/api')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('{"mock":"data"}');
+
+    request(server)
+      .get('/list')
+      .expect(200)
+      .expect('GET:\n /api\nPUT:\nPOST:\nPATCH:\nDELETE:\n', done);
   });
 
 });
