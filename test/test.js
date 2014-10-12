@@ -118,6 +118,24 @@ describe('mockRequests()', function () {
       .expect('not mocked', done);
   });
 
+  it('should allow arbitrary methods', function (done) {
+    request(server)
+      .post('/mock/api')
+      .set('mock-method', 'COPY')
+      .send({mock: 'data'})
+      .end(function () {});
+
+    request(server)
+      .get('/api')
+      .expect(200)
+      .expect('not mocked');
+
+    request(server)
+      .copy('/api')
+      .expect(200)
+      .expect('{"mock":"data"}', done);
+  });
+
 });
 
 function createServer(opts, fn) {
