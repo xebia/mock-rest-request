@@ -15,7 +15,7 @@ Sometimes when you're testing a website or app that's backed by a NodeJS server,
 
 You send a POST request to your webserver telling it that you want to mock a certain request. This POST request contains the mock data. After that, GET requests will return the mocked data.
 
-Of course also wotks with other methods besides GET and you can also mock status codes other than 200.
+Of course also works with other methods besides GET and you can also mock status codes other than 200.
 
 ## Use with Grunt
 
