@@ -26,6 +26,12 @@ module.exports = function mockRequests(options) {
     return mocks[method];
   }
 
+  if (options.hasOwnProperty('map')) {
+    mocks['GET'] = options.map['GET'] || {};
+    mocks['POST'] = options.map['POST'] || {};
+    mocks['PUT'] = options.map['PUT'] || {};
+  }
+
   return function (req, res, next) {
     if (req.method === 'POST' && req.url.indexOf('/mock') === 0) {
       var path = req.url.substring(5);
