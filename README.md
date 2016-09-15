@@ -83,3 +83,28 @@ After that, normal calls (like the ones coming from our web application) will th
 To remove the mock for a certain path, call /reset on the path.
 
     curl http://localhost:3000/reset/api/user
+
+To register mocks programatically, you can also provide a parameter to the mockRequests
+call in the gruntfile like so (taking the example below as a base):
+```
+[...]
+          middlewares.push(mockRequests({
+            map: {
+              PUT: {
+                '/update': {
+                  body: '',
+                  responseCode: 200,
+                  header: { 'Content-Type': 'text/plain' },
+                },
+              },
+              GET: {
+                '/page': {
+                  body: '{ key: value }',
+                  responseCode: 200,
+                  header: { 'Content-Type': 'application/json' },
+                },
+              },
+            },
+          }));
+[...]
+```
