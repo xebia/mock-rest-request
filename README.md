@@ -36,9 +36,12 @@ Install with NPM and add to your project.
 ## Without Connect middleware
 
     var http = require('http');
-    var mockRequests = require('mock-rest-request');
+    var mockRequests = require('mock-rest-request')();
     http.createServer(function (req, res) {
-      mockRequests()(req, res);
+      mockRequests(req, res, function(){
+        res.statusCode = 500;
+        res.end();
+      });
     }).listen(3000);
 
 ## In Gruntfile.js
