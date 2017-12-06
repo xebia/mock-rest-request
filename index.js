@@ -8,6 +8,31 @@
  * @api public
  */
 
+/**
+  * Parse data to JSON if possible
+  */
+function parseData(data){
+  try {
+    return JSON.parse(data);
+  } catch(error) {
+    return data;
+  }
+}
+
+/**
+  * Steam request data and return a parsed version of the data
+  */
+function streamData(req, callback){
+  var body = '';
+  req.on('data',function(data){
+    body += data;
+  });
+  req.on('end',function(err){
+    if (err) callback(err);
+    else callback(null, parseData(body));
+  })
+}
+
 module.exports = function mockRequests(options) {
   var mocks = {
     GET: {},
@@ -16,7 +41,7 @@ module.exports = function mockRequests(options) {
     PATCH: {},
     DELETE: {}
   };
-
+  var calls = [];
   function mocksForRequest(req) {
     var method = req.headers['mock-method'] || 'GET';
 
@@ -72,9 +97,24 @@ module.exports = function mockRequests(options) {
           }
       }
       res.end();
+    } else if (req.url.indexOf('/calls') === 0) {
+      res.writeHead(200, {
+          'Content-Type': 'application/json'
+      });
+      var body = JSON.stringify(calls)
+      res.write(body);
+      res.end();
     } else  {
       var mockedResponse = mocks[req.method][req.url];
       if (mockedResponse) {
+        // Receive all the data and add to list of calls
+        streamData(req, function(err, data) {
+          calls.push({
+            url: req.url,
+            method: req.method,
+            data: data
+          });
+        });
         res.writeHead(mockedResponse.responseCode, mockedResponse.headers);
         res.write(mockedResponse.body);
         res.end();
