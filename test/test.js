@@ -1,5 +1,6 @@
 var http = require('http');
 var request = require('supertest');
+var expect = require('chai').expect;
 
 var mockRequests = require('..');
 
@@ -144,6 +145,40 @@ describe('mockRequests()', function () {
       .expect(200)
       .expect('GET:\n /api\nPUT:\nPOST:\nPATCH:\nDELETE:\n', done);
   });
+
+  it('should list past calls and data', function(done) {
+
+    request(server)
+      .post('/mock/api/items')
+      .set('mock-method', 'POST')
+      .send({message: 'created'})
+      .expect(200)
+      .end(function () {});
+
+    request(server)
+      .post('/api/items')
+      .send({some:'data'})
+      .expect(200)
+      .expect('{"mock":"data"}')
+      .end(function () {});
+
+    request(server)
+      .get('/calls')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .end(function(err,res){
+        var data = JSON.parse(res.text);
+        expect(data).to.deep.equal([{
+          method: 'POST',
+          url: '/api/items',
+          data: {
+            some: 'data'
+          }
+        }]);
+        done(err);
+      });
+
+  })
 
 });
 
